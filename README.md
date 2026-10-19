@@ -1,33 +1,39 @@
-# GameLluvia2024
+# Recolector de Lluvia GM
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Proyecto desarrollado en Java utilizando el framework **libGDX**, para la asignatura de **Programación Avanzada**.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+## Descripción
 
-## Platforms
+Recolector de Lluvia es un videojuego de escritorio en el que el jugador controla un tarro para recolectar gotas buenas y evitar gotas malas.
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+El proyecto utiliza programación orientada a objetos e incluye clases relacionadas con la gestión del juego, las gotas, las colisiones y las estrategias de movimiento.
 
-## Gradle
+## Tecnologías utilizadas
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+- Java 21
+- libGDX
+- Gradle
+- LWJGL3
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+## Estructura del proyecto
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+- `assets/`: imágenes, sonidos y otros recursos del videojuego.
+- `core/`: lógica principal del juego y clases Java.
+- `lwjgl3/`: configuración y lanzador para escritorio.
+- `gradle/`: archivos necesarios para ejecutar Gradle mediante el wrapper.
+
+## Ejecución
+
+**Requisito:** disponer de Java 21.
+
+1. Clonar o descargar el repositorio.
+2. Abrir una terminal en la carpeta principal del proyecto.
+3. Ejecutar el siguiente comando en Windows:
+
+   `gradlew.bat lwjgl3:run`
+
+El juego se iniciará en una ventana de escritorio.
+
+## Estado del proyecto
+
+Proyecto en desarrollo, basado en una implementación inicial de Recolector de Lluvia, que será ampliada durante la asignatura.
