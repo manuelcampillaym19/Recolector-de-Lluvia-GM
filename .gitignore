@@ -1,0 +1,10 @@
+# Archivos temporales de Gradle
+.gradle/
+**/.gradle/
+
+# Archivos compilados
+build/
+**/build/
+
+# Archivos temporales de Java
+*.class
