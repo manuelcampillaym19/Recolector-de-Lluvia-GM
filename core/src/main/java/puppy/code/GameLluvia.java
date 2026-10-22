@@ -79,7 +79,15 @@ public class GameLluvia extends ApplicationAdapter {
             
         } else if (estado == 1) {
             font.draw(batch, "Gotas totales: " + GameManager.getInstancia().getPuntos(), 5, 475);
-            font.draw(batch, "Vidas: " + GameManager.getInstancia().getVidas(), 720, 475);
+            int vidas = GameManager.getInstancia().getVidas();
+
+            String corazones = "";
+
+            for (int i = 0; i < vidas; i++) {
+                corazones += "♥ ";
+            }
+
+font.draw(batch, "Vidas: " + corazones, 650, 475);
             
             if (!tarro.estaHerido()) {
                 // ahora GameLluvia controla el input y le da la orden al tarro
