@@ -50,7 +50,7 @@ public class GameLluvia extends ApplicationAdapter {
             new Texture(Gdx.files.internal("fondo.png"));
 
         corazonTexture =
-            new Texture(Gdx.files.internal("corazonRojo.png"));
+            new Texture(Gdx.files.internal("corazonRojo2.png"));
 
         Sound dropSound =
             Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
