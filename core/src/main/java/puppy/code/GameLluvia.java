@@ -33,7 +33,7 @@ public class GameLluvia extends ApplicationAdapter {
         tarro = new Tarro(new Texture(Gdx.files.internal("bucket.png")), hurtSound);
         
         Texture gotaBuena = new Texture(Gdx.files.internal("GotaBuena.png"));
-        Texture gotaMala = new Texture(Gdx.files.internal("GotaMala.png"));
+        Texture gotaMala = new Texture(Gdx.files.internal("gotaToxica.png"));
         backgroundTexture = new Texture(Gdx.files.internal("fondo.png"));
         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
