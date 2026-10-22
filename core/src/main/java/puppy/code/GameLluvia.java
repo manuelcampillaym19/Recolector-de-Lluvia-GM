@@ -70,6 +70,8 @@ public class GameLluvia extends ApplicationAdapter {
         if (estado == 0) {
             font.draw(batch, "RECOLECTOR DE LLUVIA", 320, 300);
             font.draw(batch, "Presiona ENTER para comenzar", 300, 250);
+            font.draw(batch, "Gota azul: +1 punto", 300, 210);
+            font.draw(batch, "Gota toxica: pierdes una vida", 300, 185);
             
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 iniciarJuego();
