@@ -41,7 +41,7 @@ public class GameLluvia extends ApplicationAdapter {
         tarro = new Tarro(bucketTexture, hurtSound);
 
         Texture gotaBuena =
-            new Texture(Gdx.files.internal("gotaAgua.png"));
+            new Texture(Gdx.files.internal("gotaAgua3.png"));
 
         Texture gotaMala =
             new Texture(Gdx.files.internal("gotaToxica.png"));
