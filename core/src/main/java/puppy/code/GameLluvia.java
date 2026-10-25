@@ -1,4 +1,3 @@
-
 package puppy.code;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -67,7 +66,6 @@ public class GameLluvia extends ApplicationAdapter {
 
     @Override
     public void create() {
-
         batch = new SpriteBatch();
         shapes = new ShapeRenderer();
 
@@ -87,54 +85,52 @@ public class GameLluvia extends ApplicationAdapter {
         records = Gdx.app.getPreferences("RecolectorDeLluviaRecords");
 
         Sound hurtSound =
-            Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
+                Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
 
         Texture bucketTexture =
-            new Texture(Gdx.files.internal("bucket.png"));
+                new Texture(Gdx.files.internal("bucket.png"));
 
         tarro = new Tarro(bucketTexture, hurtSound);
 
         gotaBuenaTexture =
-            new Texture(Gdx.files.internal("gotaAgua3.png"));
+                new Texture(Gdx.files.internal("gotaAgua3.png"));
 
         gotaMalaTexture =
-            new Texture(Gdx.files.internal("gotaToxica.png"));
+                new Texture(Gdx.files.internal("gotaToxica.png"));
 
         backgroundTexture =
-            new Texture(Gdx.files.internal("imagenFondo2.png"));
+                new Texture(Gdx.files.internal("imagenFondo2.png"));
 
         corazonTexture =
-            new Texture(Gdx.files.internal("corazonRojo2.png"));
+                new Texture(Gdx.files.internal("corazonRojo2.png"));
 
         Sound dropSound =
-            Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+                Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
 
         Music rainMusic =
-            Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+                Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
         rainMusic.setVolume(0.8f);
 
         lluvia = new Lluvia(
-            gotaBuenaTexture,
-            gotaMalaTexture,
-            dropSound,
-            rainMusic
+                gotaBuenaTexture,
+                gotaMalaTexture,
+                dropSound,
+                rainMusic
         );
 
         configurarTeclado();
     }
 
-    // --------------------------------------------------
+    // ==================================================
     // TECLADO
-    // --------------------------------------------------
+    // ==================================================
 
     private void configurarTeclado() {
-
         Gdx.input.setInputProcessor(new InputAdapter() {
 
             @Override
             public boolean keyTyped(char character) {
-
                 if (estado != 2 || !esperandoNombre) {
                     return false;
                 }
@@ -142,21 +138,20 @@ public class GameLluvia extends ApplicationAdapter {
                 if (character == '\b') {
                     if (!nombreJugador.isEmpty()) {
                         nombreJugador = nombreJugador.substring(
-                            0, nombreJugador.length() - 1
+                                0, nombreJugador.length() - 1
                         );
                     }
                     return true;
                 }
 
                 if (Character.isLetterOrDigit(character)
-                    || character == ' '
-                    || character == '_'
-                    || character == '-') {
+                        || character == ' '
+                        || character == '_'
+                        || character == '-') {
 
                     if (nombreJugador.length() < 16) {
                         nombreJugador += character;
                     }
-
                     return true;
                 }
 
@@ -167,7 +162,6 @@ public class GameLluvia extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
 
                 if (estado == 0) {
-
                     if (keycode == Input.Keys.ENTER) {
                         iniciarJuego();
                         return true;
@@ -180,9 +174,7 @@ public class GameLluvia extends ApplicationAdapter {
                 }
 
                 if (estado == 2) {
-
                     if (esperandoNombre) {
-
                         if (keycode == Input.Keys.ENTER) {
                             confirmarRecord();
                             return true;
@@ -191,7 +183,7 @@ public class GameLluvia extends ApplicationAdapter {
                         if (keycode == Input.Keys.BACKSPACE) {
                             if (!nombreJugador.isEmpty()) {
                                 nombreJugador = nombreJugador.substring(
-                                    0, nombreJugador.length() - 1
+                                        0, nombreJugador.length() - 1
                                 );
                             }
                             return true;
@@ -212,9 +204,8 @@ public class GameLluvia extends ApplicationAdapter {
                 }
 
                 if (estado == 3) {
-
                     if (keycode == Input.Keys.ENTER
-                        || keycode == Input.Keys.ESCAPE) {
+                            || keycode == Input.Keys.ESCAPE) {
                         estado = 0;
                         return true;
                     }
@@ -226,7 +217,6 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private void iniciarJuego() {
-
         GameManager.getInstancia().reiniciar();
 
         tarro.crear();
@@ -241,63 +231,59 @@ public class GameLluvia extends ApplicationAdapter {
         estado = 1;
     }
 
-    // --------------------------------------------------
+    // ==================================================
     // TEXTO CENTRADO
-    // --------------------------------------------------
+    // ==================================================
 
     private void dibujarCentrado(
-        BitmapFont fuente,
-        String texto,
-        float y
-    ) {
+            BitmapFont fuente,
+            String texto,
+            float y) {
 
         layout.setText(fuente, texto);
 
         fuente.draw(
-            batch,
-            texto,
-            (ANCHO - layout.width) / 2f,
-            y
+                batch,
+                texto,
+                (ANCHO - layout.width) / 2f,
+                y
         );
     }
 
     private void dibujarTextoEnCentro(
-        BitmapFont fuente,
-        String texto,
-        float centroX,
-        float y
-    ) {
+            BitmapFont fuente,
+            String texto,
+            float centroX,
+            float y) {
 
         layout.setText(fuente, texto);
 
         fuente.draw(
-            batch,
-            texto,
-            centroX - layout.width / 2f,
-            y
+                batch,
+                texto,
+                centroX - layout.width / 2f,
+                y
         );
     }
 
-    // --------------------------------------------------
+    // ==================================================
     // RÉCORDS LOCALES
-    // --------------------------------------------------
+    // ==================================================
 
     private List<Record> obtenerRecords() {
-
         List<Record> lista = new ArrayList<>();
 
         int cantidad = records.getInteger("cantidad", 0);
 
         for (int i = 0; i < cantidad; i++) {
-
             String nombre = records.getString(
-                "nombre" + i,
-                "Jugador"
+                    "nombre" + i,
+                    "Jugador"
             );
 
             int puntos = records.getInteger(
-                "puntos" + i,
-                0
+                    "puntos" + i,
+                    0
             );
 
             lista.add(new Record(nombre, puntos));
@@ -307,7 +293,6 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private boolean calificaParaRecord(int puntos) {
-
         List<Record> lista = obtenerRecords();
 
         if (lista.size() < MAX_RECORDS) {
@@ -318,7 +303,6 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private void prepararGameOver() {
-
         int puntos = GameManager.getInstancia().getPuntos();
 
         calificaRecord = calificaParaRecord(puntos);
@@ -329,7 +313,6 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private void confirmarRecord() {
-
         if (!esperandoNombre || !necesitaRegistrar) {
             return;
         }
@@ -350,7 +333,6 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private void guardarRecord(String nombre, int puntos) {
-
         List<Record> lista = obtenerRecords();
 
         lista.add(new Record(nombre, puntos));
@@ -359,7 +341,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         if (lista.size() > MAX_RECORDS) {
             lista = new ArrayList<>(
-                lista.subList(0, MAX_RECORDS)
+                    lista.subList(0, MAX_RECORDS)
             );
         }
 
@@ -367,7 +349,6 @@ public class GameLluvia extends ApplicationAdapter {
         records.putInteger("cantidad", lista.size());
 
         for (int i = 0; i < lista.size(); i++) {
-
             Record record = lista.get(i);
 
             records.putString("nombre" + i, record.nombre);
@@ -377,12 +358,11 @@ public class GameLluvia extends ApplicationAdapter {
         records.flush();
     }
 
-    // --------------------------------------------------
+    // ==================================================
     // MENÚ PRINCIPAL
-    // --------------------------------------------------
+    // ==================================================
 
     private void dibujarPanelMenu() {
-
         float x = 105;
         float y = 35;
         float w = 590;
@@ -391,6 +371,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
+        // Panel principal oscuro.
         shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
 
         shapes.rect(x + r, y, w - 2 * r, h);
@@ -401,6 +382,7 @@ public class GameLluvia extends ApplicationAdapter {
         shapes.circle(x + r, y + h - r, r, 16);
         shapes.circle(x + w - r, y + h - r, r, 16);
 
+        // Botón de jugar.
         shapes.setColor(0.035f, 0.24f, 0.38f, 1f);
         shapes.rect(235, 220, 330, 38);
 
@@ -416,24 +398,26 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Triángulo de reproducción
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
+        // Triángulo de reproducción.
         shapes.setColor(0.35f, 0.9f, 1f, 1f);
-
         shapes.triangle(
-            266, 231,
-            266, 247,
-            279, 239
+                266, 231,
+                266, 247,
+                279, 239
         );
 
+        // Separadores.
         shapes.setColor(0.18f, 0.2f, 0.23f, 1f);
         shapes.rect(125, 205, 550, 1);
         shapes.rect(125, 95, 550, 1);
 
+        // Indicador de puntos.
         shapes.setColor(0.08f, 0.22f, 0.13f, 1f);
         shapes.rect(594, 155, 74, 23);
 
+        // Indicador de pérdida de vida.
         shapes.setColor(0.28f, 0.09f, 0.11f, 1f);
         shapes.rect(594, 113, 74, 23);
 
@@ -441,123 +425,128 @@ public class GameLluvia extends ApplicationAdapter {
     }
 
     private void dibujarContenidoMenu() {
-
         batch.begin();
 
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
-
         dibujarCentrado(
-            tituloFont,
-            "RECOLECTOR DE LLUVIA",
-            405
+                tituloFont,
+                "RECOLECTOR DE LLUVIA",
+                405
         );
 
         subtituloFont.setColor(Color.WHITE);
-
         dibujarCentrado(
-            subtituloFont,
-            "La ciudad te necesita.",
-            373
+                subtituloFont,
+                "La ciudad te necesita.",
+                373
         );
 
         subtituloFont.setColor(0.82f, 0.88f, 0.95f, 1f);
-
         dibujarCentrado(
-            subtituloFont,
-            "Recolecta agua, esquiva el peligro",
-            348
+                subtituloFont,
+                "Recolecta agua, esquiva el peligro",
+                348
         );
 
         dibujarCentrado(
-            subtituloFont,
-            "y sobrevive a la tormenta.",
-            328
+                subtituloFont,
+                "y sobrevive a la tormenta.",
+                328
         );
 
         botonFont.setColor(0.35f, 0.9f, 1f, 1f);
-
-        botonFont.draw(
-            batch,
-            "PRESIONA ENTER PARA JUGAR",
-            289,
-            243
+        dibujarTextoEnCentro(
+                botonFont,
+                "PRESIONA ENTER PARA JUGAR",
+                410,
+                243
         );
 
+        // Gota buena.
         batch.draw(gotaBuenaTexture, 135, 153, 24, 29);
 
         font.setColor(Color.WHITE);
         font.draw(batch, "Gota de agua", 170, 177);
 
         font.setColor(0.68f, 0.7f, 0.74f, 1f);
-        font.draw(batch, "Recolectala para sumar puntos.", 170, 158);
+        font.draw(
+                batch,
+                "Recolectala para sumar puntos.",
+                170,
+                158
+        );
 
         font.setColor(0.65f, 1f, 0.72f, 1f);
         font.draw(batch, "+ Puntos", 601, 170);
 
+        // Gota tóxica.
         batch.draw(gotaMalaTexture, 135, 111, 24, 29);
 
         font.setColor(Color.WHITE);
         font.draw(batch, "Gota toxica", 170, 135);
 
         font.setColor(0.68f, 0.7f, 0.74f, 1f);
-        font.draw(batch, "Esquiva su trayectoria en zigzag.", 170, 116);
+        font.draw(
+                batch,
+                "Esquiva su trayectoria en zigzag.",
+                170,
+                116
+        );
 
         font.setColor(1f, 0.58f, 0.58f, 1f);
         font.draw(batch, "- 1 vida", 606, 128);
 
+        // Mejor separación de las instrucciones inferiores.
         font.setColor(0.78f, 0.83f, 0.9f, 1f);
-
         dibujarCentrado(
-            font,
-            "Moverse: A / D o flechas izquierda y derecha",
-            68
+                font,
+                "Moverse: A / D o flechas izquierda y derecha",
+                83
         );
 
         font.setColor(0.35f, 0.9f, 1f, 1f);
-
         dibujarCentrado(
-            font,
-            "Presiona R para ver los records",
-            47
+                font,
+                "Presiona R para ver los records",
+                59
         );
 
         batch.end();
     }
 
-    // --------------------------------------------------
-    // GAME OVER: DISEÑO MEJORADO
-    // --------------------------------------------------
+    // ==================================================
+    // GAME OVER
+    // ==================================================
 
     private void dibujarGameOver() {
-
-        // Panel principal
+        // Panel principal.
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
-        shapes.rect(170, 65, 460, 355);
+        shapes.rect(170, 55, 460, 365);
 
-        // Campo de nombre
         if (esperandoNombre) {
+            // Campo de nombre.
             shapes.setColor(0.015f, 0.06f, 0.1f, 1f);
-            shapes.rect(245, 211, 310, 38);
+            shapes.rect(245, 201, 310, 38);
 
-            // Botón guardar
+            // Botón guardar.
             shapes.setColor(0.035f, 0.24f, 0.38f, 1f);
-            shapes.rect(245, 158, 310, 36);
+            shapes.rect(245, 147, 310, 36);
         }
 
         shapes.end();
 
-        // Bordes
+        // Bordes del panel y controles.
         shapes.begin(ShapeRenderer.ShapeType.Line);
 
         shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
-        shapes.rect(170, 65, 460, 355);
+        shapes.rect(170, 55, 460, 365);
 
         if (esperandoNombre) {
             shapes.setColor(0.2f, 0.75f, 1f, 1f);
-            shapes.rect(245, 211, 310, 38);
-            shapes.rect(245, 158, 310, 36);
+            shapes.rect(245, 201, 310, 38);
+            shapes.rect(245, 147, 310, 36);
         }
 
         shapes.end();
@@ -565,136 +554,121 @@ public class GameLluvia extends ApplicationAdapter {
         batch.begin();
 
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
-
         dibujarCentrado(
-            tituloFont,
-            "¡HAS PERDIDO!",
-            380
+                tituloFont,
+                "¡HAS PERDIDO!",
+                380
         );
 
         font.setColor(Color.WHITE);
-
         dibujarCentrado(
-            font,
-            "Lograste "
-                + GameManager.getInstancia().getPuntos()
-                + " puntos",
-            340
+                font,
+                "Lograste "
+                        + GameManager.getInstancia().getPuntos()
+                        + " puntos",
+                340
         );
 
         if (esperandoNombre) {
-
             font.setColor(0.35f, 0.9f, 1f, 1f);
-
             dibujarCentrado(
-                font,
-                "¡Puedes entrar en los records!",
-                306
+                    font,
+                    "¡Puedes entrar en los records!",
+                    306
             );
 
             font.setColor(0.78f, 0.83f, 0.9f, 1f);
-
             dibujarCentrado(
-                font,
-                "Escribe tu nombre",
-                278
+                    font,
+                    "Escribe tu nombre",
+                    270
             );
 
+            // Texto dentro del campo.
             if (nombreJugador.isEmpty()) {
                 font.setColor(0.5f, 0.6f, 0.7f, 1f);
-
                 font.draw(
-                    batch,
-                    "Tu nombre...",
-                    260,
-                    235
+                        batch,
+                        "Tu nombre...",
+                        260,
+                        225
                 );
             } else {
                 font.setColor(Color.WHITE);
-
                 font.draw(
-                    batch,
-                    nombreJugador,
-                    260,
-                    235
+                        batch,
+                        nombreJugador,
+                        260,
+                        225
                 );
             }
 
             botonFont.setColor(0.35f, 0.9f, 1f, 1f);
-
             dibujarTextoEnCentro(
-                botonFont,
-                "GUARDAR RECORD",
-                400,
-                181
+                    botonFont,
+                    "GUARDAR RECORD",
+                    400,
+                    170
             );
 
             font.setColor(0.75f, 0.82f, 0.9f, 1f);
-
             dibujarCentrado(
-                font,
-                "Pulsa ENTER para guardar",
-                130
+                    font,
+                    "Pulsa ENTER para guardar",
+                    120
             );
 
         } else if (recordGuardado) {
-
             font.setColor(0.45f, 1f, 0.65f, 1f);
-
             dibujarCentrado(
-                font,
-                "¡Record guardado correctamente!",
-                290
+                    font,
+                    "¡Record guardado correctamente!",
+                    290
             );
 
             font.setColor(Color.WHITE);
-
             dibujarCentrado(
-                font,
-                "ENTER: volver a jugar",
-                235
+                    font,
+                    "ENTER: volver a jugar",
+                    235
             );
 
             dibujarCentrado(
-                font,
-                "R: ver records",
-                205
+                    font,
+                    "R: ver records",
+                    205
             );
 
         } else {
-
             font.setColor(0.85f, 0.85f, 0.9f, 1f);
-
             dibujarCentrado(
-                font,
-                "Sigue jugando para entrar en el top 10",
-                290
+                    font,
+                    "Sigue jugando para entrar en el top 10",
+                    290
             );
 
             font.setColor(Color.WHITE);
-
             dibujarCentrado(
-                font,
-                "ENTER: volver a jugar",
-                235
+                    font,
+                    "ENTER: volver a jugar",
+                    235
             );
 
             dibujarCentrado(
-                font,
-                "R: ver records",
-                205
+                    font,
+                    "R: ver records",
+                    205
             );
         }
 
         batch.end();
     }
 
-    // --------------------------------------------------
-    // TABLA DE RÉCORDS: ALINEACIÓN MEJORADA
-    // --------------------------------------------------
+    // ==================================================
+    // TABLA DE RÉCORDS
+    // ==================================================
 
     private void dibujarPantallaRecords() {
-
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
@@ -712,45 +686,46 @@ public class GameLluvia extends ApplicationAdapter {
         batch.begin();
 
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
-
         dibujarCentrado(
-            tituloFont,
-            "TABLA DE RECORDS",
-            395
+                tituloFont,
+                "TABLA DE RECORDS",
+                395
         );
 
-        // Encabezados de columnas
+        // Encabezados.
         font.setColor(0.65f, 0.75f, 0.85f, 1f);
-
         font.draw(batch, "POS.", 190, 350);
         font.draw(batch, "JUGADOR", 275, 350);
         font.draw(batch, "PUNTOS", 520, 350);
 
+        // Línea bajo los encabezados.
+        shapes.begin(ShapeRenderer.ShapeType.Line);
+        shapes.setColor(0.2f, 0.75f, 1f, 0.7f);
+        shapes.line(185, 338, 615, 338);
+        shapes.end();
+
         List<Record> lista = obtenerRecords();
 
         if (lista.isEmpty()) {
-
             font.setColor(Color.WHITE);
-
             dibujarCentrado(
-                font,
-                "Todavia no hay records guardados.",
-                255
+                    font,
+                    "Todavia no hay records guardados.",
+                    255
             );
 
             dibujarCentrado(
-                font,
-                "Juega una partida para establecer el primero.",
-                225
+                    font,
+                    "Juega una partida para establecer el primero.",
+                    225
             );
 
         } else {
-
             for (int i = 0; i < lista.size(); i++) {
-
                 Record record = lista.get(i);
                 float y = 315 - (i * 25);
 
+                // Resaltar el primer puesto.
                 if (i == 0) {
                     font.setColor(1f, 0.82f, 0.35f, 1f);
                 } else {
@@ -758,10 +733,10 @@ public class GameLluvia extends ApplicationAdapter {
                 }
 
                 font.draw(
-                    batch,
-                    String.valueOf(i + 1),
-                    200,
-                    y
+                        batch,
+                        String.valueOf(i + 1),
+                        200,
+                        y
                 );
 
                 String nombre = record.nombre;
@@ -770,35 +745,38 @@ public class GameLluvia extends ApplicationAdapter {
                     nombre = nombre.substring(0, 18);
                 }
 
-                font.draw(batch, nombre, 275, y);
+                font.draw(
+                        batch,
+                        nombre,
+                        275,
+                        y
+                );
 
                 font.draw(
-                    batch,
-                    String.valueOf(record.puntos),
-                    535,
-                    y
+                        batch,
+                        String.valueOf(record.puntos),
+                        535,
+                        y
                 );
             }
         }
 
         font.setColor(0.35f, 0.9f, 1f, 1f);
-
         dibujarCentrado(
-            font,
-            "ENTER o ESC para volver al menu",
-            75
+                font,
+                "ENTER o ESC para volver al menu",
+                75
         );
 
         batch.end();
     }
 
-    // --------------------------------------------------
+    // ==================================================
     // RENDER
-    // --------------------------------------------------
+    // ==================================================
 
     @Override
     public void render() {
-
         ScreenUtils.clear(0, 0, 0.08f, 1);
 
         camera.update();
@@ -806,40 +784,37 @@ public class GameLluvia extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         shapes.setProjectionMatrix(camera.combined);
 
-        // Fondo
+        // Fondo.
         batch.begin();
 
         if (backgroundTexture != null) {
             batch.draw(
-                backgroundTexture,
-                0,
-                0,
-                ANCHO,
-                ALTO
+                    backgroundTexture,
+                    0,
+                    0,
+                    ANCHO,
+                    ALTO
             );
         }
 
         batch.end();
 
-        // Menú principal
+        // Menú principal.
         if (estado == 0) {
-
             dibujarPanelMenu();
             dibujarContenidoMenu();
 
-        // Juego
+        // Juego.
         } else if (estado == 1) {
-
             batch.begin();
 
             font.setColor(Color.WHITE);
-
             font.draw(
-                batch,
-                "Gotas totales: "
-                    + GameManager.getInstancia().getPuntos(),
-                5,
-                475
+                    batch,
+                    "Gotas totales: "
+                            + GameManager.getInstancia().getPuntos(),
+                    5,
+                    475
             );
 
             int vidas = GameManager.getInstancia().getVidas();
@@ -848,32 +823,27 @@ public class GameLluvia extends ApplicationAdapter {
 
             for (int i = 0; i < vidas; i++) {
                 batch.draw(
-                    corazonTexture,
-                    695 + (i * 32),
-                    451,
-                    25,
-                    25
+                        corazonTexture,
+                        695 + (i * 32),
+                        451,
+                        25,
+                        25
                 );
             }
 
             batch.end();
 
             if (!tarro.estaHerido()) {
+                float delta = Gdx.graphics.getDeltaTime();
 
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
-                    || Gdx.input.isKeyPressed(Input.Keys.A)) {
-
-                    tarro.moverIzquierda(
-                        Gdx.graphics.getDeltaTime()
-                    );
+                        || Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    tarro.moverIzquierda(delta);
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)
-                    || Gdx.input.isKeyPressed(Input.Keys.D)) {
-
-                    tarro.moverDerecha(
-                        Gdx.graphics.getDeltaTime()
-                    );
+                        || Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    tarro.moverDerecha(delta);
                 }
 
                 lluvia.actualizarMovimiento(tarro);
@@ -887,28 +857,28 @@ public class GameLluvia extends ApplicationAdapter {
             batch.end();
 
             if (GameManager.getInstancia().getVidas() <= 0) {
-
                 lluvia.detener();
 
                 estado = 2;
                 prepararGameOver();
             }
 
-        // Game Over
+        // Game Over.
         } else if (estado == 2) {
-
             dibujarGameOver();
 
-        // Tabla de récords
+        // Tabla de récords.
         } else if (estado == 3) {
-
             dibujarPantallaRecords();
         }
     }
 
+    // ==================================================
+    // LIBERAR RECURSOS
+    // ==================================================
+
     @Override
     public void dispose() {
-
         if (backgroundTexture != null) {
             backgroundTexture.dispose();
         }
@@ -925,15 +895,36 @@ public class GameLluvia extends ApplicationAdapter {
             gotaMalaTexture.dispose();
         }
 
-        tarro.destruir();
-        lluvia.destruir();
+        if (tarro != null) {
+            tarro.destruir();
+        }
 
-        batch.dispose();
-        shapes.dispose();
+        if (lluvia != null) {
+            lluvia.destruir();
+        }
 
-        font.dispose();
-        tituloFont.dispose();
-        subtituloFont.dispose();
-        botonFont.dispose();
+        if (batch != null) {
+            batch.dispose();
+        }
+
+        if (shapes != null) {
+            shapes.dispose();
+        }
+
+        if (font != null) {
+            font.dispose();
+        }
+
+        if (tituloFont != null) {
+            tituloFont.dispose();
+        }
+
+        if (subtituloFont != null) {
+            subtituloFont.dispose();
+        }
+
+        if (botonFont != null) {
+            botonFont.dispose();
+        }
     }
 }
