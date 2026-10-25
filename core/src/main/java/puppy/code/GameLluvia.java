@@ -101,7 +101,7 @@ public class GameLluvia extends ApplicationAdapter {
             new Texture(Gdx.files.internal("gotaToxica.png"));
 
         backgroundTexture =
-            new Texture(Gdx.files.internal("fondo.png"));
+            new Texture(Gdx.files.internal("imagenFondo.png"));
 
         corazonTexture =
             new Texture(Gdx.files.internal("corazonRojo2.png"));
