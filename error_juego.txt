@@ -1,0 +1,39 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :core:compileJava UP-TO-DATE
+> Task :core:generateAssetList UP-TO-DATE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :lwjgl3:compileJava UP-TO-DATE
+> Task :lwjgl3:generateAssetList UP-TO-DATE
+> Task :lwjgl3:processResources UP-TO-DATE
+> Task :lwjgl3:classes UP-TO-DATE
+
+> Task :lwjgl3:run
+Exception in thread "main" com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: corazonRojo.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:190)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:101)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:122)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:114)
+	at puppy.code.GameLluvia.create(GameLluvia.java:53)
+	at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
+	at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:366)
+	at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:193)
+	at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:167)
+	at puppy.code.lwjgl3.Lwjgl3Launcher.createApplication(Lwjgl3Launcher.java:15)
+	at puppy.code.lwjgl3.Lwjgl3Launcher.main(Lwjgl3Launcher.java:11)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: corazonRojo.png (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:142)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:228)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:187)
+	... 10 more
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.10.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 9s
+5 actionable tasks: 1 executed, 4 up-to-date

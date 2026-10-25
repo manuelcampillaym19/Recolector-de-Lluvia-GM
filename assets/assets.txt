@@ -1,10 +1,15 @@
 bucket.png
+corazonRojo2.png
 drop.png
 drop.wav
-dropBad.png
 dropTarro.wav
 fondo.png
+gotaAgua.png
+gotaAgua3.png
 GotaBuena.png
-GotaMala.png
+gotaBuena2.png
+gotaToxica.png
 hurt.ogg
+imagenFondo.png
+imagenFondo2.png
 rain.mp3
