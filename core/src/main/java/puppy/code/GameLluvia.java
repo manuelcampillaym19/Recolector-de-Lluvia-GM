@@ -127,7 +127,7 @@ public class GameLluvia extends ApplicationAdapter {
         );
     }
 
-    // Panel, botón, triángulo y etiquetas del menú
+    // Panel y elementos decorativos del menú
     private void dibujarPanelMenu() {
 
         shapes.setProjectionMatrix(camera.combined);
@@ -138,7 +138,7 @@ public class GameLluvia extends ApplicationAdapter {
         float h = 265;
         float r = 12;
 
-        // Fondo oscuro con esquinas redondeadas
+        // Panel oscuro con esquinas redondeadas
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
@@ -165,15 +165,15 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Triángulo de reproducción dibujado como figura
+        // Triángulo celeste centrado verticalmente en el botón
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.35f, 0.9f, 1f, 1f);
 
         shapes.triangle(
-            267, 259,
-            267, 275,
-            280, 267
+            266, 231,
+            266, 247,
+            279, 239
         );
 
         shapes.end();
@@ -195,7 +195,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Borde exterior del panel
+        // Borde exterior
         shapes.begin(ShapeRenderer.ShapeType.Line);
 
         shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
@@ -209,7 +209,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         batch.begin();
 
-        // Título principal
+        // Título
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
 
         dibujarCentrado(
@@ -242,13 +242,12 @@ public class GameLluvia extends ApplicationAdapter {
             328
         );
 
-        // Texto del botón: sin símbolo especial en la fuente
+        // Texto del botón, sin símbolo especial
         botonFont.setColor(0.35f, 0.9f, 1f, 1f);
 
-        botonFont.draw(
-            batch,
+        dibujarCentrado(
+            botonFont,
             "PRESIONA ENTER PARA JUGAR",
-            290,
             243
         );
 
@@ -272,7 +271,7 @@ public class GameLluvia extends ApplicationAdapter {
             158
         );
 
-        // Etiqueta de puntos
+        // Puntos
         font.setColor(0.65f, 1f, 0.72f, 1f);
         font.draw(batch, "+ Puntos", 601, 170);
 
@@ -296,7 +295,7 @@ public class GameLluvia extends ApplicationAdapter {
             116
         );
 
-        // Etiqueta de vida
+        // Vidas
         font.setColor(1f, 0.58f, 0.58f, 1f);
         font.draw(batch, "- 1 vida", 606, 128);
 
@@ -380,7 +379,7 @@ public class GameLluvia extends ApplicationAdapter {
 
             batch.end();
 
-            // Movimiento del jugador y actualización de las gotas
+            // Movimiento del jugador y actualización de gotas
             if (!tarro.estaHerido()) {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
