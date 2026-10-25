@@ -234,7 +234,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         dibujarCentrado(
             botonFont,
-            "▶ PRESIONA ENTER PARA JUGAR",
+            "> PRESIONA ENTER PARA JUGAR",
             243
         );
 
