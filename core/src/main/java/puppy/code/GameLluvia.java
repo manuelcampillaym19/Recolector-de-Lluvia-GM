@@ -165,7 +165,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Triángulo celeste centrado verticalmente en el botón
+        // Triángulo de reproducción
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.35f, 0.9f, 1f, 1f);
@@ -178,7 +178,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Líneas divisorias
+        // Líneas divisorias y etiquetas
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.18f, 0.2f, 0.23f, 1f);
@@ -195,7 +195,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Borde exterior
+        // Borde exterior del panel
         shapes.begin(ShapeRenderer.ShapeType.Line);
 
         shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
@@ -209,7 +209,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         batch.begin();
 
-        // Título
+        // Título principal
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
 
         dibujarCentrado(
@@ -242,12 +242,13 @@ public class GameLluvia extends ApplicationAdapter {
             328
         );
 
-        // Texto del botón, sin símbolo especial
+        // Texto del botón, dejando espacio para el triángulo
         botonFont.setColor(0.35f, 0.9f, 1f, 1f);
 
-        dibujarCentrado(
-            botonFont,
+        botonFont.draw(
+            batch,
             "PRESIONA ENTER PARA JUGAR",
+            289,
             243
         );
 
@@ -271,7 +272,7 @@ public class GameLluvia extends ApplicationAdapter {
             158
         );
 
-        // Puntos
+        // Etiqueta de puntos
         font.setColor(0.65f, 1f, 0.72f, 1f);
         font.draw(batch, "+ Puntos", 601, 170);
 
@@ -295,7 +296,7 @@ public class GameLluvia extends ApplicationAdapter {
             116
         );
 
-        // Vidas
+        // Etiqueta de vida
         font.setColor(1f, 0.58f, 0.58f, 1f);
         font.draw(batch, "- 1 vida", 606, 128);
 
@@ -323,7 +324,7 @@ public class GameLluvia extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         shapes.setProjectionMatrix(camera.combined);
 
-        // Fondo
+        // Dibujar fondo
         batch.begin();
 
         if (backgroundTexture != null) {
