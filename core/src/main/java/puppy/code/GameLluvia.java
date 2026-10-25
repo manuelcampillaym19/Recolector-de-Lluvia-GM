@@ -1,4 +1,3 @@
-
 package puppy.code;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -60,13 +59,12 @@ public class GameLluvia extends ApplicationAdapter {
         subtituloFont.getData().setScale(1.05f);
         botonFont.getData().setScale(1.1f);
 
-        // Colores de texto
         font.setColor(Color.WHITE);
         tituloFont.setColor(new Color(0.35f, 0.9f, 1f, 1f));
         subtituloFont.setColor(Color.WHITE);
         botonFont.setColor(Color.WHITE);
 
-        // Recursos del jugador
+        // Jugador
         Sound hurtSound =
             Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
 
@@ -82,14 +80,14 @@ public class GameLluvia extends ApplicationAdapter {
         gotaMalaTexture =
             new Texture(Gdx.files.internal("gotaToxica.png"));
 
-        // Fondo y vidas
+        // Fondo y corazones
         backgroundTexture =
             new Texture(Gdx.files.internal("fondo.png"));
 
         corazonTexture =
             new Texture(Gdx.files.internal("corazonRojo2.png"));
 
-        // Sonido y música
+        // Audio
         Sound dropSound =
             Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
 
@@ -119,6 +117,7 @@ public class GameLluvia extends ApplicationAdapter {
         float y
     ) {
         layout.setText(fuente, texto);
+
         fuente.draw(
             batch,
             texto,
@@ -127,31 +126,84 @@ public class GameLluvia extends ApplicationAdapter {
         );
     }
 
-    // Dibuja el panel del menú detrás del texto
+    // Panel oscuro con esquinas redondeadas
     private void dibujarPanelMenu() {
 
         shapes.setProjectionMatrix(camera.combined);
 
-        // Fondo oscuro semitransparente
+        float x = 105;
+        float y = 55;
+        float w = 590;
+        float h = 250;
+        float r = 12;
+
+        // Fondo del panel
         shapes.begin(ShapeRenderer.ShapeType.Filled);
-        shapes.setColor(0.015f, 0.035f, 0.12f, 0.88f);
-        shapes.rect(100, 55, 600, 370);
+
+        shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
+
+        shapes.rect(x + r, y, w - 2 * r, h);
+        shapes.rect(x, y + r, w, h - 2 * r);
+
+        shapes.circle(x + r, y + r, r, 16);
+        shapes.circle(x + w - r, y + r, r, 16);
+        shapes.circle(x + r, y + h - r, r, 16);
+        shapes.circle(x + w - r, y + h - r, r, 16);
+
+        // Botón de inicio
+        shapes.setColor(0.035f, 0.24f, 0.38f, 1f);
+        shapes.rect(235, 250, 330, 38);
+
         shapes.end();
 
-        // Borde celeste
+        // Borde del botón
         shapes.begin(ShapeRenderer.ShapeType.Line);
-        shapes.setColor(0.2f, 0.8f, 1f, 1f);
-        shapes.rect(100, 55, 600, 370);
+
+        shapes.setColor(0.2f, 0.75f, 1f, 1f);
+        shapes.rect(235, 250, 330, 38);
+
+        shapes.end();
+
+        // Divisiones
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapes.setColor(0.18f, 0.2f, 0.23f, 1f);
+
+        shapes.rect(125, 235, 550, 1);
+        shapes.rect(125, 125, 550, 1);
+
+        shapes.end();
+
+        // Etiqueta verde de puntos
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapes.setColor(0.08f, 0.22f, 0.13f, 1f);
+        shapes.rect(594, 185, 74, 23);
+
+        // Etiqueta roja de vida
+        shapes.setColor(0.28f, 0.09f, 0.11f, 1f);
+        shapes.rect(594, 143, 74, 23);
+
+        shapes.end();
+
+        // Contorno del panel
+        shapes.begin(ShapeRenderer.ShapeType.Line);
+
+        shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
+
+        shapes.rect(x, y, w, h);
+
         shapes.end();
     }
 
-    // Dibuja título, instrucciones y leyenda
+    // Textos e imágenes del menú
     private void dibujarContenidoMenu() {
 
         batch.begin();
 
         // Título
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
+
         dibujarCentrado(
             tituloFont,
             "RECOLECTOR DE LLUVIA",
@@ -160,6 +212,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         // Subtítulo
         subtituloFont.setColor(Color.WHITE);
+
         dibujarCentrado(
             subtituloFont,
             "La ciudad te necesita.",
@@ -167,59 +220,83 @@ public class GameLluvia extends ApplicationAdapter {
         );
 
         subtituloFont.setColor(0.72f, 0.88f, 1f, 1f);
+
         dibujarCentrado(
             subtituloFont,
             "Recolecta agua, esquiva el peligro",
             307
         );
+
         dibujarCentrado(
             subtituloFont,
             "y sobrevive a la tormenta.",
             284
         );
 
-        // Botón visual para iniciar
-        shapes.setProjectionMatrix(camera.combined);
-        shapes.begin(ShapeRenderer.ShapeType.Filled);
-        shapes.setColor(0.02f, 0.28f, 0.55f, 1f);
-        shapes.rect(230, 218, 340, 43);
-        shapes.end();
+        // Botón
+        botonFont.setColor(0.35f, 0.9f, 1f, 1f);
 
-        shapes.begin(ShapeRenderer.ShapeType.Line);
-        shapes.setColor(0.3f, 0.9f, 1f, 1f);
-        shapes.rect(230, 218, 340, 43);
-        shapes.end();
-
-        botonFont.setColor(Color.WHITE);
         dibujarCentrado(
             botonFont,
-            "PRESIONA ENTER PARA JUGAR",
-            245
+            "▶ PRESIONA ENTER PARA JUGAR",
+            263
         );
 
-        // Leyenda de las gotas
-        batch.draw(gotaBuenaTexture, 175, 155, 32, 32);
-
-        font.setColor(0.4f, 0.9f, 1f, 1f);
-        font.draw(batch, "Gota de agua", 215, 177);
-
-        font.setColor(Color.WHITE);
-        font.draw(batch, "+ Suma puntos", 215, 155);
-
-        batch.draw(gotaMalaTexture, 420, 155, 32, 32);
-
-        font.setColor(1f, 0.4f, 0.4f, 1f);
-        font.draw(batch, "Gota toxica", 460, 177);
+        // Gota buena
+        batch.draw(
+            gotaBuenaTexture,
+            135,
+            183,
+            24,
+            29
+        );
 
         font.setColor(Color.WHITE);
-        font.draw(batch, "- Resta una vida", 460, 155);
+        font.draw(batch, "Gota de agua", 170, 207);
+
+        font.setColor(0.68f, 0.7f, 0.74f, 1f);
+        font.draw(
+            batch,
+            "Recolectala para sumar puntos.",
+            170,
+            188
+        );
+
+        // Etiqueta de puntos
+        font.setColor(0.65f, 1f, 0.72f, 1f);
+        font.draw(batch, "+ Puntos", 601, 200);
+
+        // Gota tóxica
+        batch.draw(
+            gotaMalaTexture,
+            135,
+            140,
+            24,
+            29
+        );
+
+        font.setColor(Color.WHITE);
+        font.draw(batch, "Gota toxica", 170, 164);
+
+        font.setColor(0.68f, 0.7f, 0.74f, 1f);
+        font.draw(
+            batch,
+            "Esquiva su trayectoria en zigzag.",
+            170,
+            145
+        );
+
+        // Etiqueta de vida
+        font.setColor(1f, 0.58f, 0.58f, 1f);
+        font.draw(batch, "- 1 vida", 606, 158);
 
         // Controles
-        font.setColor(0.75f, 0.85f, 1f, 1f);
+        font.setColor(0.78f, 0.83f, 0.9f, 1f);
+
         dibujarCentrado(
             font,
             "Movimiento: A / D o flechas izquierda y derecha",
-            105
+            85
         );
 
         font.setColor(Color.WHITE);
@@ -234,8 +311,9 @@ public class GameLluvia extends ApplicationAdapter {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        shapes.setProjectionMatrix(camera.combined);
 
-        // Fondo del juego
+        // Dibujar fondo primero
         batch.begin();
 
         if (backgroundTexture != null) {
@@ -266,6 +344,7 @@ public class GameLluvia extends ApplicationAdapter {
             batch.begin();
 
             font.setColor(Color.WHITE);
+
             font.draw(
                 batch,
                 "Gotas totales: "
@@ -290,11 +369,12 @@ public class GameLluvia extends ApplicationAdapter {
 
             batch.end();
 
-            // Movimiento del jugador y actualización de las gotas
+            // Movimiento del tarro y actualización de las gotas
             if (!tarro.estaHerido()) {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
                     || Gdx.input.isKeyPressed(Input.Keys.A)) {
+
                     tarro.moverIzquierda(
                         Gdx.graphics.getDeltaTime()
                     );
@@ -302,6 +382,7 @@ public class GameLluvia extends ApplicationAdapter {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)
                     || Gdx.input.isKeyPressed(Input.Keys.D)) {
+
                     tarro.moverDerecha(
                         Gdx.graphics.getDeltaTime()
                     );
@@ -310,11 +391,15 @@ public class GameLluvia extends ApplicationAdapter {
                 lluvia.actualizarMovimiento(tarro);
             }
 
+            // Dibujar jugador y gotas
             batch.begin();
+
             tarro.dibujar(batch);
             lluvia.actualizarDibujoLluvia(batch);
+
             batch.end();
 
+            // Comprobar Game Over
             if (GameManager.getInstancia().getVidas() <= 0) {
                 lluvia.detener();
                 estado = 2;
@@ -326,6 +411,7 @@ public class GameLluvia extends ApplicationAdapter {
             batch.begin();
 
             tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
+
             dibujarCentrado(
                 tituloFont,
                 "¡HAS PERDIDO!",
@@ -333,6 +419,7 @@ public class GameLluvia extends ApplicationAdapter {
             );
 
             font.setColor(Color.WHITE);
+
             dibujarCentrado(
                 font,
                 "Lograste "
