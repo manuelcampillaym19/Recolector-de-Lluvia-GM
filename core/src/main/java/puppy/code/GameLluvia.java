@@ -4,6 +4,7 @@ package puppy.code;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameLluvia extends ApplicationAdapter {
 
@@ -35,11 +39,27 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture gotaBuenaTexture;
     private Texture gotaMalaTexture;
 
-    // 0 = Menú principal | 1 = Jugando | 2 = Game Over
+    private Preferences records;
+
+    // 0 = Menú | 1 = Jugando | 2 = Game Over | 3 = Récords
     private int estado = 0;
 
     private static final float ANCHO = 800;
     private static final float ALTO = 480;
+    private static final int MAX_RECORDS = 10;
+
+    private boolean solicitudNombreMostrada = false;
+    private boolean nombrePendiente = false;
+
+    private static class Record {
+        String nombre;
+        int puntos;
+
+        Record(String nombre, int puntos) {
+            this.nombre = nombre;
+            this.puntos = puntos;
+        }
+    }
 
     @Override
     public void create() {
@@ -62,8 +82,9 @@ public class GameLluvia extends ApplicationAdapter {
 
         font.setColor(Color.WHITE);
         tituloFont.setColor(new Color(0.35f, 0.9f, 1f, 1f));
-        subtituloFont.setColor(Color.WHITE);
-        botonFont.setColor(Color.WHITE);
+
+        // Preferencias persistentes para los récords locales
+        records = Gdx.app.getPreferences("RecolectorDeLluviaRecords");
 
         // Jugador
         Sound hurtSound =
@@ -109,6 +130,9 @@ public class GameLluvia extends ApplicationAdapter {
         GameManager.getInstancia().reiniciar();
         tarro.crear();
         lluvia.crear();
+
+        solicitudNombreMostrada = false;
+        nombrePendiente = false;
         estado = 1;
     }
 
@@ -127,7 +151,129 @@ public class GameLluvia extends ApplicationAdapter {
         );
     }
 
-    // Panel y elementos decorativos del menú
+    // --------------------------------------------------
+    // RÉCORDS LOCALES
+    // --------------------------------------------------
+
+    private List<Record> obtenerRecords() {
+
+        List<Record> lista = new ArrayList<>();
+
+        int cantidad = records.getInteger("cantidad", 0);
+
+        for (int i = 0; i < cantidad; i++) {
+            String nombre = records.getString(
+                "nombre" + i,
+                "Jugador"
+            );
+
+            int puntos = records.getInteger(
+                "puntos" + i,
+                0
+            );
+
+            lista.add(new Record(nombre, puntos));
+        }
+
+        return lista;
+    }
+
+    private boolean calificaParaRecord(int puntos) {
+
+        List<Record> lista = obtenerRecords();
+
+        if (lista.size() < MAX_RECORDS) {
+            return true;
+        }
+
+        return puntos > lista.get(lista.size() - 1).puntos;
+    }
+
+    private void solicitarNombreSiCorresponde() {
+
+        if (solicitudNombreMostrada) {
+            return;
+        }
+
+        solicitudNombreMostrada = true;
+
+        int puntos = GameManager.getInstancia().getPuntos();
+
+        if (!calificaParaRecord(puntos)) {
+            nombrePendiente = false;
+            return;
+        }
+
+        nombrePendiente = true;
+
+        Gdx.input.getTextInput(
+            new com.badlogic.gdx.Input.TextInputListener() {
+
+                @Override
+                public void input(String texto) {
+
+                    String nombre = texto.trim();
+
+                    if (nombre.isEmpty()) {
+                        nombre = "Jugador";
+                    }
+
+                    guardarRecord(nombre, puntos);
+                    nombrePendiente = false;
+                }
+
+                @Override
+                public void canceled() {
+                    nombrePendiente = false;
+                }
+            },
+            "¡Nuevo récord!",
+            "Jugador",
+            "Ingresa tu nombre"
+        );
+    }
+
+    private void guardarRecord(String nombre, int puntos) {
+
+        List<Record> lista = obtenerRecords();
+
+        lista.add(new Record(nombre, puntos));
+
+        // Ordenar de mayor a menor puntaje
+        lista.sort((a, b) -> Integer.compare(b.puntos, a.puntos));
+
+        // Conservar solamente los diez mejores
+        if (lista.size() > MAX_RECORDS) {
+            lista = new ArrayList<>(
+                lista.subList(0, MAX_RECORDS)
+            );
+        }
+
+        records.clear();
+
+        records.putInteger("cantidad", lista.size());
+
+        for (int i = 0; i < lista.size(); i++) {
+            Record record = lista.get(i);
+
+            records.putString(
+                "nombre" + i,
+                record.nombre
+            );
+
+            records.putInteger(
+                "puntos" + i,
+                record.puntos
+            );
+        }
+
+        records.flush();
+    }
+
+    // --------------------------------------------------
+    // PANEL DEL MENÚ PRINCIPAL
+    // --------------------------------------------------
+
     private void dibujarPanelMenu() {
 
         shapes.setProjectionMatrix(camera.combined);
@@ -138,7 +284,6 @@ public class GameLluvia extends ApplicationAdapter {
         float h = 265;
         float r = 12;
 
-        // Panel oscuro con esquinas redondeadas
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
@@ -178,24 +323,22 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.end();
 
-        // Líneas divisorias y etiquetas
+        // Divisiones y etiquetas
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         shapes.setColor(0.18f, 0.2f, 0.23f, 1f);
         shapes.rect(125, 205, 550, 1);
         shapes.rect(125, 95, 550, 1);
 
-        // Etiqueta verde de puntos
         shapes.setColor(0.08f, 0.22f, 0.13f, 1f);
         shapes.rect(594, 155, 74, 23);
 
-        // Etiqueta roja de vida
         shapes.setColor(0.28f, 0.09f, 0.11f, 1f);
         shapes.rect(594, 113, 74, 23);
 
         shapes.end();
 
-        // Borde exterior del panel
+        // Borde exterior
         shapes.begin(ShapeRenderer.ShapeType.Line);
 
         shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
@@ -204,12 +347,10 @@ public class GameLluvia extends ApplicationAdapter {
         shapes.end();
     }
 
-    // Textos e imágenes del menú
     private void dibujarContenidoMenu() {
 
         batch.begin();
 
-        // Título principal
         tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
 
         dibujarCentrado(
@@ -218,7 +359,6 @@ public class GameLluvia extends ApplicationAdapter {
             405
         );
 
-        // Subtítulo
         subtituloFont.setColor(Color.WHITE);
 
         dibujarCentrado(
@@ -227,7 +367,6 @@ public class GameLluvia extends ApplicationAdapter {
             373
         );
 
-        // Descripción
         subtituloFont.setColor(0.82f, 0.88f, 0.95f, 1f);
 
         dibujarCentrado(
@@ -242,7 +381,7 @@ public class GameLluvia extends ApplicationAdapter {
             328
         );
 
-        // Texto del botón, dejando espacio para el triángulo
+        // Texto del botón
         botonFont.setColor(0.35f, 0.9f, 1f, 1f);
 
         botonFont.draw(
@@ -272,7 +411,6 @@ public class GameLluvia extends ApplicationAdapter {
             158
         );
 
-        // Etiqueta de puntos
         font.setColor(0.65f, 1f, 0.72f, 1f);
         font.draw(batch, "+ Puntos", 601, 170);
 
@@ -296,11 +434,10 @@ public class GameLluvia extends ApplicationAdapter {
             116
         );
 
-        // Etiqueta de vida
         font.setColor(1f, 0.58f, 0.58f, 1f);
         font.draw(batch, "- 1 vida", 606, 128);
 
-        // Controles inferiores
+        // Controles y acceso a récords
         font.setColor(0.78f, 0.83f, 0.9f, 1f);
 
         dibujarCentrado(
@@ -309,7 +446,176 @@ public class GameLluvia extends ApplicationAdapter {
             68
         );
 
+        font.setColor(0.35f, 0.9f, 1f, 1f);
+
+        dibujarCentrado(
+            font,
+            "Presiona R para ver los récords",
+            47
+        );
+
+        batch.end();
+    }
+
+    // --------------------------------------------------
+    // PANTALLA DE RÉCORDS
+    // --------------------------------------------------
+
+    private void dibujarPantallaRecords() {
+
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapes.setColor(0.035f, 0.045f, 0.065f, 0.97f);
+        shapes.rect(130, 45, 540, 390);
+
+        shapes.end();
+
+        shapes.begin(ShapeRenderer.ShapeType.Line);
+
+        shapes.setColor(0.22f, 0.25f, 0.3f, 1f);
+        shapes.rect(130, 45, 540, 390);
+
+        shapes.end();
+
+        batch.begin();
+
+        tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
+
+        dibujarCentrado(
+            tituloFont,
+            "TABLA DE RÉCORDS",
+            405
+        );
+
+        font.setColor(0.75f, 0.82f, 0.9f, 1f);
+
+        font.draw(batch, "POS.", 165, 365);
+        font.draw(batch, "JUGADOR", 245, 365);
+        font.draw(batch, "PUNTOS", 550, 365);
+
+        shapes.end();
+
+        List<Record> lista = obtenerRecords();
+
+        if (lista.isEmpty()) {
+
+            font.setColor(Color.WHITE);
+
+            dibujarCentrado(
+                font,
+                "Todavia no hay records guardados.",
+                270
+            );
+
+            dibujarCentrado(
+                font,
+                "¡Juega una partida para establecer el primero!",
+                235
+            );
+
+        } else {
+
+            for (int i = 0; i < lista.size(); i++) {
+
+                Record record = lista.get(i);
+                float y = 335 - (i * 25);
+
+                if (i == 0) {
+                    font.setColor(1f, 0.82f, 0.35f, 1f);
+                } else {
+                    font.setColor(Color.WHITE);
+                }
+
+                font.draw(batch, String.valueOf(i + 1), 175, y);
+
+                String nombre = record.nombre;
+
+                if (nombre.length() > 20) {
+                    nombre = nombre.substring(0, 20);
+                }
+
+                font.draw(batch, nombre, 245, y);
+
+                font.draw(
+                    batch,
+                    String.valueOf(record.puntos),
+                    565,
+                    y
+                );
+            }
+        }
+
+        font.setColor(0.35f, 0.9f, 1f, 1f);
+
+        dibujarCentrado(
+            font,
+            "ENTER o ESC para volver al menu",
+            75
+        );
+
+        batch.end();
+    }
+
+    // --------------------------------------------------
+    // GAME OVER
+    // --------------------------------------------------
+
+    private void dibujarGameOver() {
+
+        batch.begin();
+
+        tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
+
+        dibujarCentrado(
+            tituloFont,
+            "¡HAS PERDIDO!",
+            310
+        );
+
         font.setColor(Color.WHITE);
+
+        dibujarCentrado(
+            font,
+            "Lograste "
+                + GameManager.getInstancia().getPuntos()
+                + " puntos",
+            260
+        );
+
+        if (calificaParaRecord(GameManager.getInstancia().getPuntos())) {
+
+            font.setColor(0.35f, 0.9f, 1f, 1f);
+
+            dibujarCentrado(
+                font,
+                "¡Puedes entrar en la tabla de records!",
+                225
+            );
+
+        } else {
+
+            font.setColor(Color.WHITE);
+
+            dibujarCentrado(
+                font,
+                "¡Intenta superar tu puntuacion!",
+                225
+            );
+        }
+
+        font.setColor(Color.WHITE);
+
+        dibujarCentrado(
+            font,
+            "ENTER: volver a jugar",
+            185
+        );
+
+        dibujarCentrado(
+            font,
+            "R: ver records",
+            155
+        );
 
         batch.end();
     }
@@ -324,7 +630,7 @@ public class GameLluvia extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         shapes.setProjectionMatrix(camera.combined);
 
-        // Dibujar fondo
+        // Fondo para todas las pantallas
         batch.begin();
 
         if (backgroundTexture != null) {
@@ -349,7 +655,11 @@ public class GameLluvia extends ApplicationAdapter {
                 iniciarJuego();
             }
 
-        // JUEGO EN CURSO
+            if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+                estado = 3;
+            }
+
+        // JUEGO
         } else if (estado == 1) {
 
             batch.begin();
@@ -380,7 +690,6 @@ public class GameLluvia extends ApplicationAdapter {
 
             batch.end();
 
-            // Movimiento del jugador y actualización de gotas
             if (!tarro.estaHerido()) {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
@@ -402,7 +711,6 @@ public class GameLluvia extends ApplicationAdapter {
                 lluvia.actualizarMovimiento(tarro);
             }
 
-            // Dibujar jugador y gotas
             batch.begin();
 
             tarro.dibujar(batch);
@@ -410,45 +718,43 @@ public class GameLluvia extends ApplicationAdapter {
 
             batch.end();
 
-            // Comprobar Game Over
             if (GameManager.getInstancia().getVidas() <= 0) {
+
                 lluvia.detener();
                 estado = 2;
+
+                solicitudNombreMostrada = false;
+                nombrePendiente = false;
             }
 
         // GAME OVER
         } else if (estado == 2) {
 
-            batch.begin();
+            dibujarGameOver();
 
-            tituloFont.setColor(0.35f, 0.9f, 1f, 1f);
+            if (!solicitudNombreMostrada) {
+                solicitarNombreSiCorresponde();
+            }
 
-            dibujarCentrado(
-                tituloFont,
-                "¡HAS PERDIDO!",
-                310
-            );
+            if (!nombrePendiente
+                && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 
-            font.setColor(Color.WHITE);
-
-            dibujarCentrado(
-                font,
-                "Lograste "
-                    + GameManager.getInstancia().getPuntos()
-                    + " puntos",
-                260
-            );
-
-            dibujarCentrado(
-                font,
-                "Presiona ENTER para volver a jugar",
-                220
-            );
-
-            batch.end();
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 iniciarJuego();
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+                estado = 3;
+            }
+
+        // RÉCORDS
+        } else if (estado == 3) {
+
+            dibujarPantallaRecords();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)
+                || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+
+                estado = 0;
             }
         }
     }
