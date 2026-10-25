@@ -127,7 +127,7 @@ public class GameLluvia extends ApplicationAdapter {
         );
     }
 
-    // Panel oscuro y elementos decorativos del menú
+    // Panel, botón, triángulo y etiquetas del menú
     private void dibujarPanelMenu() {
 
         shapes.setProjectionMatrix(camera.combined);
@@ -162,6 +162,19 @@ public class GameLluvia extends ApplicationAdapter {
 
         shapes.setColor(0.2f, 0.75f, 1f, 1f);
         shapes.rect(235, 220, 330, 38);
+
+        shapes.end();
+
+        // Triángulo de reproducción dibujado como figura
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapes.setColor(0.35f, 0.9f, 1f, 1f);
+
+        shapes.triangle(
+            267, 259,
+            267, 275,
+            280, 267
+        );
 
         shapes.end();
 
@@ -229,12 +242,13 @@ public class GameLluvia extends ApplicationAdapter {
             328
         );
 
-        // Texto del botón
+        // Texto del botón: sin símbolo especial en la fuente
         botonFont.setColor(0.35f, 0.9f, 1f, 1f);
 
-        dibujarCentrado(
-            botonFont,
-            "> PRESIONA ENTER PARA JUGAR",
+        botonFont.draw(
+            batch,
+            "PRESIONA ENTER PARA JUGAR",
+            290,
             243
         );
 
@@ -310,7 +324,7 @@ public class GameLluvia extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         shapes.setProjectionMatrix(camera.combined);
 
-        // Dibujar fondo
+        // Fondo
         batch.begin();
 
         if (backgroundTexture != null) {
