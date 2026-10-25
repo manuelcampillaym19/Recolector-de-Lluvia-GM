@@ -1,71 +1,75 @@
-# Recolector de Lluvia GM
+# 🌧️ Recolector de Lluvia GM
 
-Proyecto desarrollado en **Java** utilizando el framework **libGDX**, para la asignatura de **Programación Avanzada**.
+Videojuego de escritorio desarrollado en **Java** con el framework **libGDX**, como proyecto para la asignatura de **Programación Avanzada**.
 
-## Integrantes
+El objetivo es controlar un tarro para recolectar gotas de agua, sumar puntos y evitar las gotas tóxicas que ponen en riesgo la partida.
 
-- **Mario Saavedra**
-- **Manuel Campillay**
+## 🎮 Descripción
 
-## Descripción
+**Recolector de Lluvia GM** es un videojuego inspirado en la mecánica clásica de recolección de objetos que caen desde la parte superior de la pantalla.
 
-**Recolector de Lluvia GM** es un videojuego de escritorio en el que el jugador controla un tarro para recolectar gotas de agua y evitar las gotas tóxicas.
+El jugador debe recoger las gotas de agua para aumentar su puntuación y evitar las gotas tóxicas para conservar sus vidas. A medida que se acumulan puntos, la velocidad de caída aumenta, haciendo que la partida sea progresivamente más desafiante.
 
-El juego incorpora mecánicas de movimiento, detección de colisiones, gestión de puntuación y control de vidas. Además, cuenta con una interfaz gráfica personalizada que incluye un menú principal, una pantalla de *Game Over* y una tabla de récords.
+El juego incluye un menú principal, una pantalla de *Game Over* y una tabla de récords, junto con recursos gráficos y sonoros personalizados.
 
-El proyecto se basa en una implementación inicial de Recolector de Lluvia, sobre la cual se realizaron modificaciones y mejoras en la jugabilidad y la presentación visual.
+## ✨ Características
 
-## Características principales
-
-- **Movimiento del jugador:** control del tarro mediante el teclado.
-- **Recolección de gotas:** las gotas de agua permiten acumular puntos.
-- **Gotas tóxicas:** representan un peligro para el jugador y pueden provocar la pérdida de vidas.
-- **Movimiento de las gotas:** las gotas de agua descienden verticalmente, mientras que las gotas tóxicas realizan un movimiento en zigzag durante su descenso.
-- **Sistema de vidas:** la partida termina cuando el jugador pierde todas sus vidas.
-- **Sistema de puntuación:** registra los puntos obtenidos durante la partida.
-- **Tabla de récords:** permite guardar y visualizar los mejores puntajes.
+- **Control del jugador:** movimiento horizontal del tarro mediante el teclado.
+- **Gotas de agua:** permiten aumentar la puntuación.
+- **Gotas tóxicas:** provocan la pérdida de vidas al colisionar con el tarro.
+- **Movimiento diferenciado:** las gotas de agua caen verticalmente y las gotas tóxicas se desplazan en zigzag.
+- **Dificultad progresiva:** la velocidad de las gotas aumenta según la puntuación obtenida.
+- **Sistema de vidas:** la partida termina cuando se agotan las vidas disponibles.
+- **Sistema de puntuación:** contabiliza los puntos obtenidos durante la partida.
+- **Tabla de récords:** permite guardar y consultar las mejores puntuaciones localmente.
 - **Interfaz gráfica:** incluye menú principal, pantalla de *Game Over* y pantalla de récords.
 - **Recursos audiovisuales:** incorpora imágenes, fondos y efectos de sonido.
 
-## Tecnologías utilizadas
+## 🛠️ Tecnologías utilizadas
 
-- **Java 21:** lenguaje de programación.
+- **Java:** lenguaje de programación.
 - **libGDX:** framework para el desarrollo del videojuego.
-- **Gradle:** herramienta de compilación y gestión del proyecto.
+- **Gradle:** herramienta de compilación y gestión de dependencias.
 - **LWJGL3:** backend utilizado para ejecutar el juego en escritorio.
 
-## Estructura del proyecto
+## 📁 Estructura del proyecto
 
-- `assets/`: contiene las imágenes, los sonidos y otros recursos utilizados por el videojuego.
-- `core/`: contiene la lógica principal del juego y las clases Java.
-- `lwjgl3/`: contiene la configuración y el lanzador para la ejecución en escritorio.
-- `gradle/`: contiene los archivos necesarios para ejecutar Gradle mediante el wrapper.
+| Directorio | Descripción |
+|---|---|
+| `assets/` | Imágenes, sonidos y otros recursos del juego. |
+| `core/` | Clases Java y lógica principal del videojuego. |
+| `lwjgl3/` | Lanzador y configuración para la ejecución en escritorio. |
+| `gradle/` | Archivos del wrapper de Gradle. |
 
-## Requisitos
+## ⚙️ Requisitos
 
-- Tener **Java 21** instalado y configurado correctamente.
-- Disponer de una terminal para ejecutar los comandos de Gradle.
+- Tener un **JDK compatible con la configuración de Gradle** instalado.
+- Utilizar Windows para los comandos de ejecución indicados a continuación.
+- Disponer de una terminal para ejecutar Gradle.
 
-## Ejecución
+## ▶️ Ejecución en Windows
 
-En Windows, sigue estos pasos:
-
-1. Clonar o descargar el repositorio.
-2. Abrir una terminal en la carpeta principal del proyecto.
-3. Compilar el proyecto con el siguiente comando:
+1. Clona el repositorio o descarga el proyecto.
+2. Abre una terminal en la carpeta raíz del proyecto.
+3. Compila el proyecto:
 
    ```bat
    gradlew.bat build
    ```
 
-4. Ejecutar el videojuego con el siguiente comando:
+4. Ejecuta el videojuego:
 
    ```bat
-   gradlew.bat lwjgl3:run
+   gradlew.bat :lwjgl3:run
    ```
 
-Una vez completada la compilación, se abrirá la ventana del videojuego.
+Al finalizar el proceso de inicio, se abrirá la ventana del videojuego.
 
-## Estado del proyecto
+## 👥 Integrantes
 
-Proyecto académico desarrollado para la asignatura de **Programación Avanzada**, basado en una implementación inicial de Recolector de Lluvia y ampliado mediante modificaciones en sus mecánicas de juego, interfaz gráfica y sistema de récords.
+- **Mario Saavedra**
+- **Manuel Campillay**
+
+## 📌 Estado del proyecto
+
+Proyecto académico desarrollado para la asignatura de **Programación Avanzada**. Parte de una implementación inicial de *Recolector de Lluvia* e incorpora modificaciones en las mecánicas de juego, el comportamiento de las gotas, la presentación visual y el sistema de récords.
