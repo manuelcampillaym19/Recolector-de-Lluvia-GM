@@ -1,12 +1,12 @@
-
 package puppy.code;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import java.util.Objects;
 
 public class GotaBuena extends Gota {
 
-    private Sound dropSound;
+    private final Sound dropSound;
 
     public GotaBuena(
             float x,
@@ -16,7 +16,10 @@ public class GotaBuena extends Gota {
             EstrategiaMovimiento estrategia) {
 
         super(x, y, textura, estrategia);
-        this.dropSound = dropSound;
+        this.dropSound = Objects.requireNonNull(
+                dropSound,
+                "El sonido de la gota buena no puede ser null"
+        );
     }
 
     @Override
