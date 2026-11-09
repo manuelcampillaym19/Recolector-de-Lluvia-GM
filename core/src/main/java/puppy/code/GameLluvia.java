@@ -1,3 +1,4 @@
+
 package puppy.code;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture corazonTexture;
     private Texture gotaBuenaTexture;
     private Texture gotaMalaTexture;
+
+    // Sonido compartido con la fábrica de gotas buenas.
+    private Sound dropSound;
 
     private Preferences records;
 
@@ -82,7 +87,7 @@ public class GameLluvia extends ApplicationAdapter {
         subtituloFont.getData().setScale(1.05f);
         botonFont.getData().setScale(1.1f);
 
-        // IMPORTANTE: conservar el mismo nombre para los récords.
+        // Se conserva el mismo nombre para los récords.
         records = Gdx.app.getPreferences("RecolectorDeLluviaRecords");
 
         Sound hurtSound =
@@ -105,7 +110,7 @@ public class GameLluvia extends ApplicationAdapter {
         corazonTexture =
                 new Texture(Gdx.files.internal("corazonRojo2.png"));
 
-        Sound dropSound =
+        dropSound =
                 Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
 
         Music rainMusic =
@@ -113,12 +118,19 @@ public class GameLluvia extends ApplicationAdapter {
 
         rainMusic.setVolume(0.8f);
 
-        lluvia = new Lluvia(
-                gotaBuenaTexture,
-                gotaMalaTexture,
-                dropSound,
-                rainMusic
+        // Configuración de las fábricas de gotas.
+        Array<GotaFactory> fabricas = new Array<>();
+
+        fabricas.add(
+                new GotaBuenaFactory(gotaBuenaTexture, dropSound)
         );
+
+        fabricas.add(
+                new GotaMalaFactory(gotaMalaTexture)
+        );
+
+        // Lluvia recibe las fábricas mediante la abstracción.
+        lluvia = new Lluvia(fabricas, rainMusic);
 
         configurarTeclado();
     }
@@ -745,7 +757,7 @@ public class GameLluvia extends ApplicationAdapter {
         font.draw(batch, "JUGADOR", 275, 350);
         font.draw(batch, "PUNTOS", 520, 350);
 
-        // Leer los registros de las mismas preferencias de siempre.
+        // Leer los registros de las mismas preferencias.
         List<Record> lista = obtenerRecords();
 
         if (lista.isEmpty()) {
@@ -945,6 +957,11 @@ public class GameLluvia extends ApplicationAdapter {
 
         if (lluvia != null) {
             lluvia.destruir();
+        }
+
+        // El sonido de recolección ahora se administra aquí.
+        if (dropSound != null) {
+            dropSound.dispose();
         }
 
         if (batch != null) {
