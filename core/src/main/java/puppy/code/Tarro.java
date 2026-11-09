@@ -1,7 +1,6 @@
+
 package puppy.code;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,18 +8,19 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Tarro implements Colisionable {
+
     private Rectangle bucket;
     private Texture bucketImage;
     private Sound sonidoHerido;
-    
+
     private int velx = 400;
     private boolean herido = false;
     private int tiempoHeridoMax = 50;
     private int tiempoHerido;
-    
-    private final int SCREEN_WIDTH = 800;
-    private final int BUCKET_WIDTH = 64;
-    private final int BUCKET_HEIGHT = 64;
+
+    private static final int SCREEN_WIDTH = 800;
+    private static final int BUCKET_WIDTH = 64;
+    private static final int BUCKET_HEIGHT = 64;
 
     public Tarro(Texture tex, Sound ss) {
         this.bucketImage = tex;
@@ -29,10 +29,10 @@ public class Tarro implements Colisionable {
 
     @Override
     public Rectangle getArea() {
-        return bucket;
+        // Devolvemos una copia para proteger el estado interno.
+        return new Rectangle(bucket);
     }
 
-    // Ahora delegamos la suma de puntos al Singleton
     public void sumarPuntos(int pp) {
         GameManager.getInstancia().sumarPuntos(pp);
     }
@@ -45,7 +45,6 @@ public class Tarro implements Colisionable {
         bucket.height = BUCKET_HEIGHT;
     }
 
-    // Delegamos la perdida de vida al Singleton
     public void dañar() {
         GameManager.getInstancia().restarVida();
         herido = true;
@@ -65,9 +64,9 @@ public class Tarro implements Colisionable {
         }
     }
 
-    // nuevos metodos de movimiento encapsulados
     public void moverIzquierda(float deltaTime) {
         bucket.x -= velx * deltaTime;
+
         if (bucket.x < 0) {
             bucket.x = 0;
         }
@@ -75,6 +74,7 @@ public class Tarro implements Colisionable {
 
     public void moverDerecha(float deltaTime) {
         bucket.x += velx * deltaTime;
+
         if (bucket.x > SCREEN_WIDTH - BUCKET_WIDTH) {
             bucket.x = SCREEN_WIDTH - BUCKET_WIDTH;
         }
