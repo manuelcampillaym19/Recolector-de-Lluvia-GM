@@ -41,7 +41,6 @@ public abstract class Gota implements Colisionable {
     // Cada tipo de gota define su propio efecto.
     protected abstract void aplicarEfecto(Tarro tarro);
 
-    // Método Hook: comportamiento opcional.
-    protected void reproducirSonido() {
-    }
+    // Cada tipo de gota define su propio sonido.
+    protected abstract void reproducirSonido();
 }
