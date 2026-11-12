@@ -1,5 +1,6 @@
 package puppy.code;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import java.util.Objects;
 
@@ -8,6 +9,14 @@ public class GotaMalaBuilder implements GotaBuilder {
     private float x, y;
     private Texture textura;
     private EstrategiaMovimiento estrategia;
+    private final Sound sonidoHerido;
+
+    public GotaMalaBuilder(Sound sonidoHerido) {
+        this.sonidoHerido = Objects.requireNonNull(
+                sonidoHerido,
+                "El sonido de la gota mala no puede ser null"
+        );
+    }
 
     @Override
     public GotaMalaBuilder setPosicion(float x, float y) {
@@ -30,6 +39,12 @@ public class GotaMalaBuilder implements GotaBuilder {
 
     @Override
     public GotaMala build() {
-        return new GotaMala(x, y, textura, estrategia);
+        return new GotaMala(
+                x,
+                y,
+                textura,
+                sonidoHerido,
+                estrategia
+        );
     }
 }
