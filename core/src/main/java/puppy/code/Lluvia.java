@@ -3,8 +3,6 @@ package puppy.code;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,17 +12,23 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class Lluvia {
 
     private Array<Gota> gotas;
-    private Array<GotaFactory> fabricas;
+    private final Array<GotaFactory> fabricas;
 
     private long lastDropTime;
 
-    private Music rainMusic;
+    private final Music rainMusic;
 
     public Lluvia(Array<GotaFactory> fabricas, Music rainMusic) {
 
         if (fabricas == null || fabricas.size == 0) {
             throw new IllegalArgumentException(
                     "Debe existir al menos una fábrica de gotas"
+            );
+        }
+
+        if (rainMusic == null) {
+            throw new IllegalArgumentException(
+                    "La música de lluvia no puede ser null"
             );
         }
 
@@ -73,6 +77,12 @@ public class Lluvia {
                 fabricaSeleccionada = fabrica;
                 break;
             }
+        }
+
+        if (fabricaSeleccionada == null) {
+            throw new IllegalStateException(
+                    "No se pudo seleccionar una fábrica de gotas"
+            );
         }
 
         Gota nuevaGota = fabricaSeleccionada.crear(x, y);
