@@ -1,7 +1,5 @@
-
 package puppy.code;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,7 +9,6 @@ public class Tarro implements Colisionable {
 
     private Rectangle bucket;
     private Texture bucketImage;
-    private Sound sonidoHerido;
 
     private int velx = 400;
     private boolean herido = false;
@@ -22,9 +19,8 @@ public class Tarro implements Colisionable {
     private static final int BUCKET_WIDTH = 64;
     private static final int BUCKET_HEIGHT = 64;
 
-    public Tarro(Texture tex, Sound ss) {
+    public Tarro(Texture tex) {
         this.bucketImage = tex;
-        this.sonidoHerido = ss;
     }
 
     @Override
@@ -49,7 +45,6 @@ public class Tarro implements Colisionable {
         GameManager.getInstancia().restarVida();
         herido = true;
         tiempoHerido = tiempoHeridoMax;
-        sonidoHerido.play();
     }
 
     public void dibujar(SpriteBatch batch) {
