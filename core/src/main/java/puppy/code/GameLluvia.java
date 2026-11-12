@@ -1,4 +1,3 @@
-
 package puppy.code;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -41,8 +40,9 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture gotaBuenaTexture;
     private Texture gotaMalaTexture;
 
-    // Sonido compartido con la fábrica de gotas buenas.
+    // Sonidos compartidos con las fábricas de gotas.
     private Sound dropSound;
+    private Sound hurtSound;
 
     private Preferences records;
 
@@ -90,13 +90,13 @@ public class GameLluvia extends ApplicationAdapter {
         // Se conserva el mismo nombre para los récords.
         records = Gdx.app.getPreferences("RecolectorDeLluviaRecords");
 
-        Sound hurtSound =
+        hurtSound =
                 Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
 
         Texture bucketTexture =
                 new Texture(Gdx.files.internal("bucket.png"));
 
-        tarro = new Tarro(bucketTexture, hurtSound);
+        tarro = new Tarro(bucketTexture);
 
         gotaBuenaTexture =
                 new Texture(Gdx.files.internal("gotaAgua3.png"));
@@ -126,7 +126,7 @@ public class GameLluvia extends ApplicationAdapter {
         );
 
         fabricas.add(
-                new GotaMalaFactory(gotaMalaTexture)
+                new GotaMalaFactory(gotaMalaTexture, hurtSound)
         );
 
         // Lluvia recibe las fábricas mediante la abstracción.
@@ -959,9 +959,13 @@ public class GameLluvia extends ApplicationAdapter {
             lluvia.destruir();
         }
 
-        // El sonido de recolección ahora se administra aquí.
+        // Los sonidos se administran desde GameLluvia.
         if (dropSound != null) {
             dropSound.dispose();
+        }
+
+        if (hurtSound != null) {
+            hurtSound.dispose();
         }
 
         if (batch != null) {
